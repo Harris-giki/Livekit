@@ -1,16 +1,43 @@
-# Byte-compiled / cache files
-__pycache__/
-*.py[cod]
-*.pyo
-
-# Virtual environments
+# Virtual Environment
+myenv/
 venv/
 env/
-myenv/
+ENV/
 
-# Environment variable files
+# Environment Variables (API keys, secrets)
 .env
-.env.*
-gi
-# VS Code settings (optional)
+.env.local
+.env.production
+.env.staging
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
 .vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
