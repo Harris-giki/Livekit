@@ -1,4 +1,5 @@
 from livekit.agents import llm
+<<<<<<< HEAD
 import enum
 from typing import Annotated
 import logging
@@ -15,10 +16,13 @@ class CarDetails(enum.Enum):
     Model = "model"
     Year = "year"
     
+=======
+>>>>>>> 80da09c4ce1455d1decf5f03e7ca8888a90930d0
 
 class AssistantFnc(llm.FunctionContext):
     def __init__(self):
         super().__init__()
+<<<<<<< HEAD
         
         self._car_details = {
             CarDetails.VIN: "",
@@ -80,3 +84,6 @@ class AssistantFnc(llm.FunctionContext):
     
     def has_car(self):
         return self._car_details[CarDetails.VIN] != ""
+=======
+        
+>>>>>>> 80da09c4ce1455d1decf5f03e7ca8888a90930d0
