@@ -4,11 +4,7 @@ from dataclasses import dataclass
 from contextlib import contextmanager
 
 @dataclass
-<<<<<<< HEAD
-class Car: #represents the data stored in the database
-=======
 class Car:
->>>>>>> 80da09c4ce1455d1decf5f03e7ca8888a90930d0
     vin: str
     make: str
     model: str
@@ -31,11 +27,7 @@ class DatabaseDriver:
         with self._get_connection() as conn:
             cursor = conn.cursor()
             
-<<<<<<< HEAD
-            #Initialize database; Create cars table
-=======
             # Create cars table
->>>>>>> 80da09c4ce1455d1decf5f03e7ca8888a90930d0
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS cars (
                     vin TEXT PRIMARY KEY,
@@ -45,12 +37,7 @@ class DatabaseDriver:
                 )
             """)
             conn.commit()
-<<<<<<< HEAD
-            
-#creating a car in the database
-=======
 
->>>>>>> 80da09c4ce1455d1decf5f03e7ca8888a90930d0
     def create_car(self, vin: str, make: str, model: str, year: int) -> Car:
         with self._get_connection() as conn:
             cursor = conn.cursor()
@@ -60,12 +47,7 @@ class DatabaseDriver:
             )
             conn.commit()
             return Car(vin=vin, make=make, model=model, year=year)
-<<<<<<< HEAD
-        
-#get a car from the database
-=======
 
->>>>>>> 80da09c4ce1455d1decf5f03e7ca8888a90930d0
     def get_car_by_vin(self, vin: str) -> Optional[Car]:
         with self._get_connection() as conn:
             cursor = conn.cursor()
