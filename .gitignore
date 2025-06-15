@@ -1,7 +1,5 @@
 # Virtual Environment
 myenv/
-
-
 # Environment Variables (API keys, secrets)
 .env
 .env.local
