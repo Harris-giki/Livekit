@@ -16,7 +16,7 @@ class Assistant(Agent):
 async def entrypoint(ctx: agents.JobContext):
     # Create session with Groq components
     session = AgentSession(
-        vad=silero.VAD.load(),  # Add VAD for STT streaming support
+        vad=silero.VAD.load(),
         stt=groq.STT(
             model="whisper-large-v3-turbo",
         ),

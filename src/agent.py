@@ -6,8 +6,8 @@ from livekit.plugins import (
     noise_cancellation,
     silero,  # For VAD
 )
-from prompts import INSTRUCTIONS, WELCOME_MESSAGE, LOOKUP_VIN_MESSAGE
-from db_driver import DatabaseDriver
+from src.prompts import INSTRUCTIONS, WELCOME_MESSAGE, LOOKUP_VIN_MESSAGE
+from src.db_driver import DatabaseDriver
 import enum
 from typing import Annotated
 import logging

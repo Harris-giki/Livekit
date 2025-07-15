@@ -6,3 +6,4 @@ flask[async]
 flask
 flask-cors
 uvicorn
+livekit-agents[silero]~=1.0
