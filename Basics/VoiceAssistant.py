@@ -11,7 +11,9 @@ load_dotenv()
 
 class Assistant(Agent):
     def __init__(self) -> None:
-        super().__init__(instructions="You are a helpful voice AI assistant. Keep your responses conversational and concise.")
+        super().__init__(instructions="You are a helpful voice AI assistant. Keep your responses short")
+        self.last_user_input = None  # to store transcript
+
 
 async def entrypoint(ctx: agents.JobContext):
     # Create session with Groq components
@@ -49,3 +51,4 @@ async def entrypoint(ctx: agents.JobContext):
 
 if __name__ == "__main__":
     agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))
+    
