@@ -1,0 +1,20 @@
+# Core LiveKit Agents framework
+livekit-agents
+
+# LiveKit plugins for various services
+livekit-plugins-cartesia  # Text-to-speech
+livekit-plugins-deepgram  # Speech-to-text
+livekit-plugins-openai    # LLM and realtime models
+livekit-plugins-silero    # Voice activity detection
+livekit-agents[groq]~=1.0
+# Optional: Noise cancellation (uncomment if needed)
+# livekit-plugins-noise-cancellation
+
+# Data handling and validation
+pydantic>=2.0.0
+PyYAML>=6.0
+
+# Environment variables
+python-dotenv>=1.0.0
+livekit-plugins-noise-cancellation~=0.2
+
