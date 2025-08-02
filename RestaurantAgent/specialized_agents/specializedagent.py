@@ -3,10 +3,11 @@ from pydantic import Field
 from livekit.agents.llm import function_tool
 from livekit.agents.voice import Agent
 from livekit.plugins import groq
-from base_agent import BaseAgent
 from common_functions import RunContext_T, update_name, update_phone
+from RestaurantAgent.data import UserData
+from config import logger
 
-class SpecializedAgent(BaseAgent):
+class SpecializedAgent(Agent):
     def __init__(self, menu: str) -> None:
         super().__init__(
             instructions=(
@@ -19,6 +20,19 @@ class SpecializedAgent(BaseAgent):
             tts=groq.TTS(model="playai-tts", voice="Arista-PlayAI"),
         )
         self.menu = menu
+
+    async def on_enter(self) -> None:
+        agent_name = self.__class__.__name__
+        logger.info(f"entering task {agent_name}")
+
+        userdata: UserData = self.session.userdata
+        chat_ctx = self.chat_ctx.copy()
+        chat_ctx.add_message(
+            role="system",
+            content=f"You are {agent_name} agent. Current user data is {userdata.summarize()}",
+        )
+        await self.update_chat_ctx(chat_ctx)
+        self.session.generate_reply(tool_choice="none")
 
     @function_tool()
     async def update_reservation_time(
@@ -44,9 +58,3 @@ class SpecializedAgent(BaseAgent):
             f"Reservation confirmed for {userdata.customer_name} at {userdata.reservation_time}. "
             f"We will contact you at {userdata.customer_phone} if needed."
         )
-
-    @function_tool()
-    async def to_takeaway(self, context: RunContext_T) -> tuple[Agent, str]:
-        """Called when the user wants to place a takeaway order.
-        Transfers to the takeaway agent."""
-        return await self._transfer_to_agent("takeaway", context)

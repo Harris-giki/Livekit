@@ -5,10 +5,9 @@ from livekit.plugins import groq, silero
 
 # Import all the modules
 from config import MENU
-from models import UserData
+from RestaurantAgent.data import UserData
 from specialized_agents.specializedagent import SpecializedAgent
 # from livekit.plugins import noise_cancellation
-
 
 async def entrypoint(ctx: JobContext):
     # Initialize user data with all agents
@@ -37,9 +36,6 @@ async def entrypoint(ctx: JobContext):
             # noise_cancellation=noise_cancellation.BVC(),
         ),
     )
-
     # await agent.say("Welcome to our restaurant! How may I assist you today?")
-
-
 if __name__ == "__main__":
     cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
