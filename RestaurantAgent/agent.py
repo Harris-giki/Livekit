@@ -5,8 +5,8 @@ from livekit.plugins import groq, silero
 
 # Import all the modules
 from config import MENU
-from RestaurantAgent.data import UserData
-from specialized_agents.specializedagent import SpecializedAgent
+from RestaurantAgent.SpecializedAgent.data import UserData
+from SpecializedAgent.ReservationAgent import SpecializedAgent
 # from livekit.plugins import noise_cancellation
 
 async def entrypoint(ctx: JobContext):

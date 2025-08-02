@@ -2,7 +2,7 @@ from typing import Annotated
 from pydantic import Field
 from livekit.agents.llm import function_tool
 from livekit.agents.voice import Agent, RunContext
-from RestaurantAgent.data import UserData
+from RestaurantAgent.SpecializedAgent.data import UserData
 
 # Type alias for better readability
 RunContext_T = RunContext[UserData]
