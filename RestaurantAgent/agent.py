@@ -14,7 +14,7 @@ async def entrypoint(ctx: JobContext):
     userdata = UserData()
     userdata.agents.update(
         {
-            "greeter": SpecializedAgent(MENU),
+            "MainAgent": SpecializedAgent(MENU),
         }
     )
     
@@ -30,7 +30,7 @@ async def entrypoint(ctx: JobContext):
 
     # Start the session with the greeter agent
     await session.start(
-        agent=userdata.agents["greeter"],
+        agent=userdata.agents["MainAgent"],
         room=ctx.room,
         room_input_options=RoomInputOptions(
             # noise_cancellation=noise_cancellation.BVC(),

@@ -1,9 +1,9 @@
-from typing import Annotated
-from pydantic import Field
-from livekit.agents.llm import function_tool
-from livekit.agents.voice import Agent
+from typing import Annotated # to add meta data to types
+from pydantic import Field # used for data validation or to add description to the fields 
+from livekit.agents.llm import function_tool 
+from livekit.agents.voice import Agent, RunContext
 from livekit.plugins import groq
-from common_functions import RunContext_T, update_name, update_phone
+from common_functions import update_name, update_phone
 from SpecializedAgent.data import UserData
 from config import logger
 
@@ -13,15 +13,17 @@ class SpecializedAgent(Agent):
             instructions=(
                 f"You are a friendly restaurant receptionist and reservation agent. The menu is: {menu}\n"
                 "Your job is to greet callers, help them make reservations, collect their name, phone number, and reservation time, "
-                "and confirm details. If they want takeaway, guide them to the takeaway agent."
+                "and confirm details."
             ),
             tools=[update_name, update_phone],
+            
+            # Agent Level LLM & TTS level model specification to provide flexibility for different agents
             llm=groq.LLM(model="llama3-8b-8192", parallel_tool_calls=False),
             tts=groq.TTS(model="playai-tts", voice="Arista-PlayAI"),
         )
         self.menu = menu
 
-    async def on_enter(self) -> None:
+    async def on_enter(self) -> None: #life cycle method for Livekit to use automatically when the session starts
         agent_name = self.__class__.__name__
         logger.info(f"entering task {agent_name}")
 
@@ -31,25 +33,20 @@ class SpecializedAgent(Agent):
             role="system",
             content=f"You are {agent_name} agent. Current user data is {userdata.summarize()}",
         )
-        await self.update_chat_ctx(chat_ctx)
+        await self.update_chat_ctx(chat_ctx) # method accessed from the parent class
         self.session.generate_reply(tool_choice="none")
 
     @function_tool()
     async def update_reservation_time(
         self,
-        time: Annotated[str, Field(description="The reservation time")],
-        context: RunContext_T,
+        time: Annotated[str, Field(description="The reservation time")], # giving descp/metadata about the time variable
+        # good practice usually helpful for developers
+        context: RunContext[UserData],
     ) -> str:
         """Called when the user provides their reservation time.
         Confirm the time with the user before calling the function."""
         userdata = context.userdata
         userdata.reservation_time = time
-        return f"The reservation time is updated to {time}"
-
-    @function_tool()
-    async def confirm_reservation(self, context: RunContext_T) -> str:
-        """Called when the user confirms the reservation."""
-        userdata = context.userdata
         if not userdata.customer_name or not userdata.customer_phone:
             return "Please provide your name and phone number first."
         if not userdata.reservation_time:
