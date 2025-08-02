@@ -4,7 +4,7 @@ from livekit.agents.llm import function_tool
 from livekit.agents.voice import Agent
 from livekit.plugins import groq
 from common_functions import RunContext_T, update_name, update_phone
-from RestaurantAgent.SpecializedAgent.data import UserData
+from SpecializedAgent.data import UserData
 from config import logger
 
 class SpecializedAgent(Agent):

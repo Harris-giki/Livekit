@@ -5,7 +5,7 @@ from livekit.plugins import groq, silero
 
 # Import all the modules
 from config import MENU
-from RestaurantAgent.SpecializedAgent.data import UserData
+from SpecializedAgent.data import UserData
 from SpecializedAgent.ReservationAgent import SpecializedAgent
 # from livekit.plugins import noise_cancellation
 
