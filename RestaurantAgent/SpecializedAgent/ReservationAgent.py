@@ -43,14 +43,14 @@ class SpecializedAgent(Agent):
         # good practice usually helpful for developers
         context: RunContext[UserData],
     ) -> str:
-        """Called when the user provides their reservation time.
-        Confirm the time with the user before calling the function."""
+        """Called when the user provides their reservation time."""
         userdata = context.userdata
         userdata.reservation_time = time
         if not userdata.customer_name or not userdata.customer_phone:
             return "Please provide your name and phone number first."
         if not userdata.reservation_time:
             return "Please provide reservation time first."
+        logger.info(f"Name: {userdata.customer_name}, Phone: {userdata.customer_phone}, Time: {userdata.reservation_time}")
         return (
             f"Reservation confirmed for {userdata.customer_name} at {userdata.reservation_time}. "
             f"We will contact you at {userdata.customer_phone} if needed."

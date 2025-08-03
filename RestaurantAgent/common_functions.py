@@ -4,6 +4,7 @@ from livekit.agents.llm import function_tool
 from livekit.agents.voice import Agent, RunContext
 # Run-context is a generic class from livekit that can hold the session-related data 
 from SpecializedAgent.data import UserData
+from config import logger
 
 @function_tool()
 async def update_name(
@@ -13,8 +14,8 @@ async def update_name(
     """Called when the user provides their name."""
     userdata = context.userdata
     userdata.customer_name = name
+    logger.info(f"Name set to: {userdata.customer_name}")
     return f"The name is updated to {name}"
-
 
 @function_tool()
 async def update_phone(
@@ -24,8 +25,8 @@ async def update_phone(
     """Called when the user provides their phone number."""
     userdata = context.userdata
     userdata.customer_phone = phone
+    logger.info(f"Phone Number set to: {userdata.customer_phone}")
     return f"The phone number is updated to {phone}"
-
 
 @function_tool()
 async def to_greeter(context: RunContext[UserData]) -> Agent:
