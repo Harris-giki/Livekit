@@ -28,7 +28,6 @@ async def entrypoint(ctx: JobContext):
         llm=groq.LLM(model="llama3-8b-8192"),
         tts=groq.TTS(model="playai-tts", voice="Arista-PlayAI"),
         vad=silero.VAD.load(),
-        max_tool_steps=5,
     )
     
     # Start the session
