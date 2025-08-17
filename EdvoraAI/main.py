@@ -19,7 +19,7 @@ async def entrypoint(ctx: JobContext):
     user_data = UserData()
     
     # Create the agent
-    agent = StudentInfoAgent()
+    agent = agent = StudentInfoAgent()
     
     # Create the agent session with Groq services
     session = AgentSession[UserData](
