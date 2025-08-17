@@ -23,7 +23,7 @@ async def entrypoint(ctx: JobContext):
     
     # Create the agent session with Groq services
     session = AgentSession[UserData](
-        userdata=user_data,
+        userdata=user_data, #hold the session context
         stt=groq.STT(model="whisper-large-v3-turbo"),
         llm=groq.LLM(model="llama3-8b-8192"),
         tts=groq.TTS(model="playai-tts", voice="Arista-PlayAI"),

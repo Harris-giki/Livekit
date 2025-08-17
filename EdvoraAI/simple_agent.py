@@ -1,6 +1,6 @@
 from livekit.agents.voice import Agent
 from livekit.plugins import groq
-from functions import get_student_info, add_new_student, list_all_students
+from functions import get_student_info, add_new_student
 from config import logger
 
 
@@ -28,7 +28,6 @@ class StudentInfoAgent(Agent):
             tools=[
                 get_student_info,
                 add_new_student,
-                list_all_students
             ],
         )
     
