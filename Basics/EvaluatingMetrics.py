@@ -1,29 +1,21 @@
-import logging
-
-from dotenv import load_dotenv
-_ = load_dotenv(override=True)
-
-logger = logging.getLogger("dlai-agent")
-logger.setLevel(logging.INFO)
-
-from livekit import agents
-from livekit.agents import Agent, AgentSession, JobContext, WorkerOptions, jupyter
+from livekit.agents import Agent, AgentSession, JobContext
 from livekit.plugins import (
     openai,
-    elevenlabs,
+    deepgram,
+    cartesia,
     silero,
 )
-
 from livekit.agents.metrics import LLMMetrics, STTMetrics, TTSMetrics, EOUMetrics
 import asyncio
+
 class MetricsAgent(Agent):
     def __init__(self) -> None:
-        llm = openai.LLM(model="gpt-4o")
-        #llm = openai.LLM(model="gpt-4o-mini")   # Example with lower latency
-        stt = openai.STT(model="whisper-1")
-        tts = elevenlabs.TTS()
+        #llm = openai.LLM(model="gpt-4o-mini")  # Example with lower latency
+        stt = deepgram.STT(model="nova-3", language="multi")
+        llm = openai.LLM(model="gpt-4-turbo")  # Updated to use OpenAI's GPT-4 Turbo
+        tts = cartesia.TTS(model="sonic-2", voice="f786b574-daa5-4673-aa0c-cbe3e8534c02")
         silero_vad = silero.VAD.load()
-        
+
         super().__init__(
             instructions="You are a helpful assistant communicating via voice",
             stt=stt,
@@ -77,12 +69,9 @@ class MetricsAgent(Agent):
         print(f"Streamed: {'Yes' if metrics.streamed else 'No'}")
         print("------------------\n")
 
-
 async def entrypoint(ctx: JobContext):
     await ctx.connect()
-
     session = AgentSession()
-
     await session.start(
         agent=MetricsAgent(),
         room=ctx.room,
