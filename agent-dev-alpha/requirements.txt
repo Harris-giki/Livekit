@@ -6,3 +6,5 @@ livekit-agents[groq]~=1.2
 livekit-agents[turn-detector]~=1.2
 requests
 socketio
+pymongo
+motor

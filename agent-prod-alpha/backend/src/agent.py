@@ -15,6 +15,7 @@ from agent_utils.first_message_config import first_message_mode
 from agent_utils.system_messages import setup_agent_context
 from agent_utils.provider_instances import create_provider_instances
 from agent_utils.agent_blueprint_loader import load_agent_metadata
+from agent_utils.function_tools import patient_lookup, book_appointment
 
 
 load_dotenv()
@@ -23,7 +24,13 @@ load_dotenv()
 
 class Assistant(Agent):
     def __init__(self, metadata: dict = None, tools: list[FunctionTool | RawFunctionTool] | None = None) -> None:
-        super().__init__(instructions="You are a helpful voice AI medical assistant." , tools=tools)
+        # Add patient lookup and appointment booking tools to any existing tools
+        if tools:
+            all_tools = [patient_lookup, book_appointment] + tools
+        else:
+            all_tools = [patient_lookup, book_appointment]
+            
+        super().__init__(instructions="You are a helpful voice AI medical assistant." , tools=all_tools)
         self.metadata = metadata or {}
 
     async def on_enter(self) -> None:
