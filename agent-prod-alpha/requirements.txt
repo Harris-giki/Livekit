@@ -1,0 +1,6 @@
+livekit-agents[deepgram,openai,cartesia,silero,turn-detector,elevenlabs]~=1.2
+livekit-plugins-noise-cancellation~=0.2
+python-dotenv
+livekit-agents[groq]~=1.2
+livekit-agents[turn-detector]~=1.2
+requests
