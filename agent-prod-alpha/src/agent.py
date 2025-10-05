@@ -1,5 +1,5 @@
 import uuid
-import os
+
 from livekit import agents
 from dotenv import load_dotenv
 from livekit.agents import (
@@ -7,7 +7,6 @@ from livekit.agents import (
 from livekit.agents.llm import RawFunctionTool, FunctionTool
 from livekit.plugins import (noise_cancellation, silero)
 from livekit.plugins.turn_detector.english import EnglishModel  
-from pathlib import Path
 
 from agent_utils.default_agent import default_bp
 from agent_utils.agent_tools import build_raw_tools
