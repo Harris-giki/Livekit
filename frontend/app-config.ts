@@ -1,0 +1,20 @@
+import type { AppConfig } from "./lib/types";
+
+export const APP_CONFIG_DEFAULTS: AppConfig = {
+  companyName: "LiveKit",
+  pageTitle: "Radiance",
+  pageDescription: "Pakistan's First Healthcare Voice Assistant",
+
+  supportsChatInput: true,
+  supportsVideoInput: false,
+  supportsScreenShare: false,
+  isPreConnectBufferEnabled: true,
+
+  logo: "/lk-logo.svg",
+  accent: "#002cf2",
+  logoDark: "/lk-logo-dark.svg",
+  accentDark: "#1fd5f9",
+  startButtonText: "Start call",
+
+  agentName: undefined,
+};
