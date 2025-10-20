@@ -1,0 +1,188 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "patient-lookup",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -112,
+        0
+      ],
+      "id": "2f31cf56-0fcd-4c69-ab2c-c706662e2af7",
+      "name": "Webhook",
+      "webhookId": "12f6f7de-3429-4a10-853b-daa1c61c3801"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the input from webhook\nconst inputData = $input.item.json;\n\nconsole.log('===== WEBHOOK DATA START =====');\nconsole.log('Full data:', JSON.stringify(inputData, null, 2));\nconsole.log('===== WEBHOOK DATA END =====');\n\nlet patientId = null;\n\n// Check if body exists\nif (!inputData.body) {\n  console.log('ERROR: No body in webhook data');\n  return { json: { patient_id: null, error: 'No body in webhook data' } };\n}\n\nconsole.log('Body exists:', inputData.body);\n\n// Access from body.message\nif (inputData.body.message && inputData.body.message.toolCalls) {\n  console.log('ToolCalls found:', inputData.body.message.toolCalls);\n  \n  const toolCall = inputData.body.message.toolCalls[0];\n  if (toolCall && toolCall.function) {\n    let args = toolCall.function.arguments;\n    console.log('Arguments (raw):', args);\n    console.log('Arguments type:', typeof args);\n    \n    // Parse if string\n    if (typeof args === 'string') {\n      try {\n        args = JSON.parse(args);\n        console.log('Arguments (parsed):', args);\n        patientId = args.patient_id;\n      } catch (error) {\n        console.error('Parse error:', error.message);\n      }\n    } else {\n      patientId = args.patient_id;\n    }\n  }\n}\n\nconsole.log('Final patient_id:', patientId);\n\n// Return the patient_id as a number\nreturn {\n  json: {\n    patient_id: parseInt(patientId) || null\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        64,
+        0
+      ],
+      "id": "db8ef0e8-42f5-41f5-82ec-fdc1794a5928",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "af3897b2-e00b-48f0-834e-a5739a219e24",
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": "={{ 0 }}",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        0
+      ],
+      "id": "1009b7c3-f53f-4f03-acd2-a78676ca3afb",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"data\": $json } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        768,
+        -80
+      ],
+      "id": "57db0a12-ad8a-4faf-b043-ce3a313dc317",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": false,\n  \"message\": \"Patient not found\"\n}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        768,
+        64
+      ],
+      "id": "72dad361-6d16-47a5-9821-79e247e6563c",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "collection": "patient_data",
+        "options": {},
+        "query": "={ \"patient_id\": {{ $json.patient_id }} }"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        272,
+        0
+      ],
+      "id": "c92310ed-65b7-4a54-825b-a44d6daa9ddb",
+      "name": "Find documents",
+      "credentials": {
+        "mongoDb": {
+          "id": "Glg4z8yGuZfrlnXj",
+          "name": "MongoDB account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Find documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find documents": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b870717d-32d2-4c3c-9978-d2f98d86fe35",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ef95245843b9228c9930b1c9d90faa7d7911e09fb93ceffc375e38cae1fb507a"
+  },
+  "id": "0wOXVl0b6t2kM1e4",
+  "tags": []
+}
